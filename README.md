@@ -182,7 +182,7 @@ gradle :xjet-app:assembleDebug
 ## Publishing (GitHub + JitPack)
 
 See [DEPLOY.md](DEPLOY.md) for the exact steps. The framework modules declare
-`com.github.xjet` as group and `2.0.2` as version, and a ready-to-use
+`com.github.xjet` as group and `2.0.3` as version, and a ready-to-use
 publication template lives in `gradle/jitpack-publish.gradle`.
 
 ## License

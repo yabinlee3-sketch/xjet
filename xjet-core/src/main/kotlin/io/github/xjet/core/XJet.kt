@@ -41,21 +41,31 @@ object XJet {
             val routes = RouteRegistry()
             routeRegistry = routes
 
+            // 1) Explicit programmatic choices (via XJetConfig) always win.
+            config.database?.let { reg.register(DatabaseProvider::class.java, it, override = true) }
+            config.cache?.let { reg.register(CacheProvider::class.java, it, override = true) }
+            config.eventBus?.let { reg.register(EventBusProvider::class.java, it, override = true) }
+            config.router?.let { reg.register(RouterProvider::class.java, it, override = true) }
+            config.imageLoader?.let { reg.register(ImageLoaderProvider::class.java, it, override = true) }
+
+            // 2) Built-in defaults act as fallbacks and may be replaced later by the
+            //    config asset or compile-time @SpiService registrations.
+            if (!reg.has(CacheProvider::class.java)) {
+                reg.register(CacheProvider::class.java, InMemoryCacheProvider(), override = false)
+            }
+            if (!reg.has(EventBusProvider::class.java)) {
+                reg.register(EventBusProvider::class.java, SharedFlowEventBus(), override = false)
+            }
+            if (!reg.has(RouterProvider::class.java)) {
+                reg.register(RouterProvider::class.java, SimpleRouterProvider(context.applicationContext, routes), override = false)
+            }
+
+            // 3) Config-asset automatic discovery (can replace built-in defaults).
             if (config.autoDiscoverConfig) {
                 discoverAssetConfig(context.applicationContext, config.spiAssetPath, reg)
             }
 
-            val database = config.database
-            val cache = config.cache ?: InMemoryCacheProvider()
-            val eventBus = config.eventBus ?: SharedFlowEventBus()
-            val router = config.router ?: SimpleRouterProvider(context.applicationContext, routes)
-
-            if (database != null) reg.register(DatabaseProvider::class.java, database, override = true)
-            reg.register(CacheProvider::class.java, cache, override = true)
-            reg.register(EventBusProvider::class.java, eventBus, override = true)
-            reg.register(RouterProvider::class.java, router, override = true)
-            config.imageLoader?.let { reg.register(ImageLoaderProvider::class.java, it, override = true) }
-
+            // 4) Compile-time @SpiService / @XRoute via KSP.
             loadGenerated(reg, routes)
 
             registry = reg
@@ -128,3 +138,4 @@ object XJet {
     private fun requireRegistry(): SpiRegistry =
         registry ?: throw IllegalStateException("XJet.init(...) must be called before accessing any capability.")
 }
+
