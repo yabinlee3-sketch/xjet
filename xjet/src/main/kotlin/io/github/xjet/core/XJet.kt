@@ -55,7 +55,7 @@ object XJet {
             config.errorInterceptor?.let { reg.register(ExceptionInterceptor::class.java, it, override = true) }
 
             // 2) Built-in defaults act as fallbacks and may be replaced later by the
-            //    config asset or compile-time @SpiService registrations.
+            //    config asset or runtime XJet.register(...).
             if (!reg.has(CacheProvider::class.java)) {
                 reg.register(CacheProvider::class.java, InMemoryCacheProvider(), override = false)
             }
@@ -82,9 +82,6 @@ object XJet {
                 discoverAssetConfig(context.applicationContext, config.spiAssetPath, reg)
             }
 
-            // 4) Compile-time @SpiService / @XRoute via KSP.
-            loadGenerated(reg, routes)
-
             registry = reg
 
             if (config.installUncaughtErrorHandler) {
@@ -108,21 +105,6 @@ object XJet {
         }
     }
 
-    private fun loadGenerated(reg: SpiRegistry, routes: RouteRegistry) {
-        try {
-            val clazz = Class.forName("io.github.xjet.generated.XJetGeneratedSpi")
-            clazz.getMethod("registerAll", SpiRegistry::class.java).invoke(null, reg)
-            val routeList = clazz.getMethod("routes").invoke(null) as? java.util.List<*> ?: emptyList<Any>()
-            routeList.forEach { item ->
-                if (item is RouteDescriptor) routes.register(item, override = true)
-            }
-            if (debug) Log.d(logTag, "XJet KSP-generated SPI + routes installed")
-        } catch (_: ClassNotFoundException) {
-            // Optional; means no annotations were compiled into this app
-        } catch (t: Throwable) {
-            if (debug) Log.w(logTag, "Failed to load XJetGeneratedSpi", t)
-        }
-    }
 
     private fun installUncaughtErrorHandler(interceptor: ExceptionInterceptor) {
         val previous = Thread.getDefaultUncaughtExceptionHandler()
@@ -176,8 +158,28 @@ object XJet {
         return errorInterceptor().tryCatch(source, severity, block)
     }
 
-    /** Route table collected from @XRoute + runtime registration. */
+    /** Route table kept at runtime; register routes explicitly (no annotation processing needed). */
     fun routes(): RouteRegistry = routeRegistry
+
+    /**
+     * Registers an Activity route at runtime.
+     *
+     * This replaces the old compile-time `@XRoute` generation: call it once during
+     * startup, then navigate with `XJet.router().navigate(path)` (or use
+     * `XJet.open(Target::class.java)` when you already hold the class).
+     */
+    fun registerRoute(
+        path: String,
+        target: Class<out android.app.Activity>,
+        group: String = "app",
+        title: String = "",
+        override: Boolean = false,
+    ) {
+        routeRegistry.register(
+            RouteDescriptor(path = path, group = group, title = title, targetClassName = target.name),
+            override = override,
+        )
+    }
 
     private fun requireRegistry(): SpiRegistry =
         registry ?: throw IllegalStateException("XJet.init(...) must be called before accessing any capability.")

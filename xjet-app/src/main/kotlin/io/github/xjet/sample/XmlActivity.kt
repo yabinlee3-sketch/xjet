@@ -8,11 +8,9 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.compose.material3.Text
 import androidx.compose.ui.platform.ComposeView
-import io.github.xjet.annotation.XRoute
 import io.github.xjet.compose.XJetTheme
 import io.github.xjet.xml.XJetActivity
 
-@XRoute(path = "xmlScreen", group = "xml", title = "XML + embedded Compose")
 class XmlActivity : XJetActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,7 +23,7 @@ class XmlActivity : XJetActivity() {
         }
 
         root.addView(TextView(this).apply {
-            text = "Classic XML screen. XJet routes launched me via @XRoute + SimpleRouterProvider."
+            text = "Classic XML screen. XJet routes launched me via runtime route registration + SimpleRouterProvider."
             textSize = 18f
             gravity = Gravity.CENTER
         })
@@ -46,4 +44,5 @@ class XmlActivity : XJetActivity() {
         setContentView(root)
     }
 }
+
 

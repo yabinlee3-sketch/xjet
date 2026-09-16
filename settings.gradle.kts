@@ -18,12 +18,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "xjet"
 
-include(":xjet-annotation")
-include(":xjet-spi")
-include(":xjet-processor")
-include(":xjet-core")
-include(":xjet-room")
-include(":xjet-ui-xml")
-include(":xjet-ui-compose")
+include(":xjet")
 include(":xjet-app")
-

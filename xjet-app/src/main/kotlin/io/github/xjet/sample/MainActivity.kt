@@ -21,11 +21,9 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import io.github.xjet.annotation.XRoute
 import io.github.xjet.compose.XJetTheme
 import io.github.xjet.compose.collectAsEffect
 
-@XRoute(path = "main", group = "home", title = "XJet Sample Home")
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,3 +70,4 @@ fun HomeScreen(vm: HomeViewModel = viewModel()) {
         }
     }
 }
+

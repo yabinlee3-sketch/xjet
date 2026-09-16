@@ -13,7 +13,7 @@ android {
         minSdk = 23
         targetSdk = 35
         versionCode = 1
-        versionName = "2.1.0"
+        versionName = "2.2.0"
     }
     buildFeatures {
         compose = true
@@ -36,12 +36,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":xjet-core"))
-    implementation(project(":xjet-annotation"))
-    implementation(project(":xjet-room"))
-    implementation(project(":xjet-ui-xml"))
-    implementation(project(":xjet-ui-compose"))
-    ksp(project(":xjet-processor"))
+    // XJet is now a single dependency — no more splitting into multiple modules.
+    implementation(project(":xjet"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
@@ -61,6 +57,4 @@ dependencies {
     implementation(libs.compose.ui)
     debugImplementation(libs.compose.ui.tooling)
 }
-
-
 

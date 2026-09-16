@@ -1,28 +1,23 @@
-# XJet 2.0 — Deployment (GitHub + JitPack)
+# XJet 2.2.0 — Deployment (GitHub + JitPack)
 
-This document describes how to publish the framework so other apps can pull
-it with one line from JitPack.
+Single-module release. Consumers depend on **one** artifact:
+`com.github.yabinlee3-sketch:xjet:xjet:2.2.0`.
 
 ## 1. Push the source to GitHub
 
 ```bash
-# every framework module keeps version 2.1.0 (see root build)
-git init
 git add .
-git commit -m "XJet 2.0 initial release"
-git remote add origin https://github.com/<your-org>/xjet.git
+git commit -m "Merge XJet into a single module (v2.2.0)"
 git push -u origin main
-git tag 2.1.0
-git push origin 2.1.0
+git tag 2.2.0
+git push origin 2.2.0
 ```
-
-> Publishing to GitHub/JitPack requires YOUR GitHub account and token; this
-> step deliberately stays out of the repository (no secrets are checked in).
 
 ## 2. JitPack build
 
-Open `https://jitpack.io/#<your-org>/xjet/2.1.0` and click *Get it*.
-JitPack builds the tag and exposes the modules below.
+Open `https://jitpack.io/#com.github.yabinlee3-sketch/xjet/2.2.0` and click
+*Get it*. Because only one module remains, the build exposes a single
+`xjet` artifact.
 
 ## 3. Consumer dependency
 
@@ -34,56 +29,23 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.<your-org>.xjet:xjet-core:2.1.0")
-    implementation("com.github.<your-org>.xjet:xjet-room:2.1.0")
-    implementation("com.github.<your-org>.xjet:xjet-ui-compose:2.1.0")
-    // KSP annotation processor
-    ksp("com.github.<your-org>.xjet:xjet-processor:2.1.0")
+    implementation("com.github.yabinlee3-sketch:xjet:xjet:2.2.0")
 }
 ```
 
-## 4. Publication template
+## 4. Publication
 
-A ready template is at `gradle/jitpack-publish.gradle`. To enable it after you
-own the repository, add to the root `build.gradle.kts`:
-
-```kotlin
-apply(from = file("gradle/jitpack-publish.gradle"))
-```
-
-### Android library modules
-
-```groovy
-release(MavenPublication) {
-    artifactId = project.name
-    afterEvaluate {
-        artifact "${buildDir}/outputs/aar/${project.name}-release.aar"
-    }
-}
-publishing { publications { release } }
-```
-
-### JVM modules (annotation, spi, processor)
-
-```groovy
-jitpack(MavenPublication) {
-    artifactId = project.name
-    afterEvaluate {
-        artifact tasks.named('jar').get().archiveFile
-    }
-}
-```
-
-Run `./gradlew assembleRelease :xjet-app:assembleDebug` once before publishing
-so the AAR artifacts exist, then publish the tag. No framework versions are
-pinned inside the code, so consumers can use `resolutionStrategy` to override
-Google/AndroidX dependencies at will (see README).
+`xjet/build.gradle.kts` uses `maven-publish` + `singleVariant("release")` so
+JitPack publishes the `release` AAR directly. Run
+`./gradlew :xjet:test :xjet:assembleRelease :xjet-app:assembleDebug` before
+tagging to verify locally.
 
 ## 5. Verification checklist
 
-- [ ] `gradle :xjet-spi:test` passes
-- [ ] `gradle :xjet-app:assembleDebug` passes
-- [ ] `gradle assembleRelease` produces `*/build/outputs/aar/*-release.aar`
-- [ ] GitHub tag `2.1.0` pushed
-- [ ] JitPack build green for the tag
-- [ ] a scratch app compiles with the JitPack coordinates from section 3
+- [ ] `:xjet:test` passes
+- [ ] `:xjet:assembleRelease` produces `xjet/build/outputs/aar/xjet-release.aar`
+- [ ] `:xjet-app:assembleDebug` passes
+- [ ] lint: `:xjet:lintVitalAnalyzeRelease` + `:xjet-app:lintVitalAnalyzeRelease`
+- [ ] GitHub tag `2.2.0` pushed
+- [ ] JitPack build green for `2.2.0`
+- [ ] a scratch app compiles with the single JitPack coordinate from section 3
