@@ -65,6 +65,14 @@ object XJet {
             if (!reg.has(RouterProvider::class.java)) {
                 reg.register(RouterProvider::class.java, SimpleRouterProvider(context.applicationContext, routes), override = false)
             }
+            if (!reg.has(HttpProvider::class.java)) {
+                reg.register(HttpProvider::class.java, JdkHttpProvider(), override = false)
+            }
+
+            if (!reg.has(ImageLoaderProvider::class.java)) {
+                reg.register(ImageLoaderProvider::class.java, AndroidImageLoaderProvider(), override = false)
+            }
+
             if (!reg.has(ExceptionInterceptor::class.java)) {
                 reg.register(ExceptionInterceptor::class.java, LogExceptionInterceptor(), override = false)
             }
@@ -154,6 +162,7 @@ object XJet {
     fun eventBus(): EventBusProvider = get(EventBusProvider::class.java)
     fun router(): RouterProvider = get(RouterProvider::class.java)
     fun imageLoader(): ImageLoaderProvider? = getOrNull(ImageLoaderProvider::class.java)
+    fun http(): HttpProvider = get(HttpProvider::class.java)
 
     fun errorInterceptor(): ExceptionInterceptor = get(ExceptionInterceptor::class.java)
 

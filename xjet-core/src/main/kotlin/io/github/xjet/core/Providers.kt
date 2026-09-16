@@ -52,8 +52,11 @@ interface ImageLoaderProvider {
     fun load(url: String, target: ImageTarget)
 }
 
-/** Abstraction over XML-free UI targets. */
-interface ImageTarget
+/** A view/object that can receive a loaded bitmap. Custom targets are welcome. */
+interface ImageTarget {
+    fun onLoadSuccess(bitmap: android.graphics.Bitmap) {}
+    fun onLoadFailed(throwable: Throwable) {}
+}
 
 /** Generic one-shot UI affordance delegated by base activities/fragments. */
 interface UiDelegate {
@@ -68,3 +71,4 @@ interface UiDelegate {
 interface XJetContent {
     val routePath: String
 }
+

@@ -30,6 +30,12 @@ Room and Navigation.
 | Extra | Persistent cache | `SharedPrefsCacheProvider`, `FileCacheProvider` (swap via `XJetConfig.cache`) |
 | Extra | Structured log | `XJetLog` (json / xml / throwable + leveled messages) |
 | Extra | Four-state content layout | `UiState` loading/error/empty/content + `XJetStateBox` (Compose) |
+| Extra | Network layer | `HttpProvider` SPI + `JdkHttpProvider` default + `XJet.http()/getText/postJson` |
+| Extra | Default image loader | `AndroidImageLoaderProvider` + `ImageViewTarget` (dependency-free) |
+| Extra | Permission helpers | `PermissionKit.areGranted/missing/launch/rationale` |
+| Extra | Kits + crypt | `Kits` (date/file/random/package) + `Codec` (MD5/SHA-1/SHA-256) |
+| Extra | Chain router | `XJet.open(Target::class.java) { putString(..); requestCode(..); anim(..) }` |
+| Extra | List adapter | `SimpleRecyclerAdapter<T,VH>` in `xjet-ui-xml` |
 
 ## Modules
 
@@ -222,7 +228,7 @@ gradle :xjet-app:assembleDebug
 ## Publishing (GitHub + JitPack)
 
 See [DEPLOY.md](DEPLOY.md) for the exact steps. The framework modules declare
-`com.github.xjet` as group and `2.0.4` as version, and a ready-to-use
+`com.github.xjet` as group and `2.1.0` as version, and a ready-to-use
 publication template lives in `gradle/jitpack-publish.gradle`.
 
 ## License

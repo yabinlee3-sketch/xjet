@@ -29,6 +29,7 @@ android {
 
 dependencies {
     api(project(":xjet-core"))
+    api(libs.androidx.recyclerview)
 }
 
 afterEvaluate {
@@ -41,5 +42,6 @@ afterEvaluate {
         }
     }
 }
+
 
 
