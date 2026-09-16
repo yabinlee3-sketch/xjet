@@ -1,0 +1,27 @@
+// XJet -> JitPack publication template (Groovy).
+// Apply from the root build once the GitHub repository is owned:
+//   apply(from = file("gradle/jitpack-publish.gradle"))
+apply plugin: 'maven-publish'
+
+afterEvaluate {
+    publishing {
+        publications {
+            if (plugins.hasPlugin('com.android.library')) {
+                release(MavenPublication) {
+                    groupId 'com.github.xjet'
+                    version '2.0.0'
+                    artifactId project.name
+                    def aar = new File(project.buildDir, 'outputs/aar/' + project.name + '-release.aar')
+                    artifact aar
+                }
+            } else {
+                jitpack(MavenPublication) {
+                    groupId 'com.github.xjet'
+                    version '2.0.0'
+                    artifactId project.name
+                    from components.java
+                }
+            }
+        }
+    }
+}

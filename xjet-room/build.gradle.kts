@@ -1,0 +1,28 @@
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+}
+
+android {
+    namespace = "io.github.xjet.room"
+    compileSdk = 35
+    defaultConfig {
+        minSdk = 23
+    }
+    publishing {
+        singleVariant("release")
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+}
+
+dependencies {
+    api(project(":xjet-core"))
+    api(libs.room.runtime)
+    api(libs.room.ktx)
+}

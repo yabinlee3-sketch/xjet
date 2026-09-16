@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">XJet Sample</string>
+    <string name="embedded_xml_hint">I am a classic XML view embedded inside a Compose screen (Compose &lt;=&gt; XML interop).</string>
+</resources>
