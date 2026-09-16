@@ -40,6 +40,7 @@ object XJet {
             this.appContext = context.applicationContext
             this.debug = config.debug
             this.logTag = config.logTag
+            XJetLog.init(this.debug, this.logTag)
 
             val reg = SpiRegistry()
             val routes = RouteRegistry()

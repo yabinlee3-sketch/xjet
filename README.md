@@ -26,6 +26,10 @@ Room and Navigation.
 | 4.8 | KSP annotation processing | `xjet-annotation`, `xjet-processor` (routes + SPI registration) |
 | 4.9 | Strict top-down layering | modules only depend downward; app is the only leaf |
 | 4.10 | Single entry point | `XJet.init(context, config)`, access via `XJet.xxx()` |
+| Extra | Global exception interceptor | `ExceptionInterceptor` SPI + `XJet.capture/tryCatch` + `Flow.catchAndReport` |
+| Extra | Persistent cache | `SharedPrefsCacheProvider`, `FileCacheProvider` (swap via `XJetConfig.cache`) |
+| Extra | Structured log | `XJetLog` (json / xml / throwable + leveled messages) |
+| Extra | Four-state content layout | `UiState` loading/error/empty/content + `XJetStateBox` (Compose) |
 
 ## Modules
 

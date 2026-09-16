@@ -99,3 +99,62 @@ class SimpleRouterProvider(
     override fun currentRoute(): String? = null
 }
 
+
+/**
+ * SharedPreferences-backed [CacheProvider]. Handy for tiny persistent key/value
+ * settings. Optional — swap in at init via XJetConfig.cache(...).
+ */
+class SharedPrefsCacheProvider(
+    context: Context,
+    private val spName: String = "xjet_cache",
+) : CacheProvider {
+    private val sp = context.getSharedPreferences(spName, Context.MODE_PRIVATE)
+
+    override fun get(key: String): String? = sp.getString(key, null)
+    override fun put(key: String, value: String) {
+        sp.edit().putString(key, value).apply()
+    }
+    override fun getBytes(key: String): ByteArray? {
+        val encoded = sp.getString(key, null) ?: return null
+        return android.util.Base64.decode(encoded, android.util.Base64.NO_WRAP)
+    }
+    override fun putBytes(key: String, value: ByteArray) {
+        sp.edit().putString(key, android.util.Base64.encodeToString(value, android.util.Base64.NO_WRAP)).apply()
+    }
+    override fun remove(key: String) {
+        sp.edit().remove(key).apply()
+    }
+    override fun clear() {
+        sp.edit().clear().apply()
+    }
+}
+
+/**
+ * Simple file-backed [CacheProvider] (application cache dir). Optional — swap in
+ * at init via XJetConfig.cache(...) when persistence is needed.
+ */
+class FileCacheProvider(
+    context: Context,
+    private val dirName: String = "xjet_cache",
+    maxBytes: Long = 16L * 1024 * 1024,
+) : CacheProvider {
+    private val dir = java.io.File(context.cacheDir, dirName).apply { mkdirs() }
+
+    override fun get(key: String): String? = read(file(key))
+    override fun put(key: String, value: String) = write(file(key), value.toByteArray(Charsets.UTF_8))
+    override fun getBytes(key: String): ByteArray? = readBytes(file(key))
+    override fun putBytes(key: String, value: ByteArray) = write(file(key), value)
+    override fun remove(key: String) { file(key).delete() }
+    override fun clear() { dir.listFiles()?.forEach { it.delete() } }
+
+    private fun file(key: String) = java.io.File(dir, safeName(key))
+    private fun safeName(key: String) = key.hashCode().toString(16) + "_" + key.replace(Regex("[^a-zA-Z0-9._-]"), "_")
+
+    private fun write(file: java.io.File, bytes: ByteArray) {
+        file.parentFile?.mkdirs()
+        file.writeBytes(bytes)
+    }
+    private fun read(file: java.io.File): String? = try { file.readText(Charsets.UTF_8) } catch (_: Exception) { null }
+    private fun readBytes(file: java.io.File): ByteArray? = try { file.readBytes() } catch (_: Exception) { null }
+}
+
