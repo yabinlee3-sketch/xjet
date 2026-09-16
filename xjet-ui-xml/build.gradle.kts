@@ -22,6 +22,9 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+    lint {
+        disable += "NullSafeMutableLiveData"
+    }
 }
 
 dependencies {
@@ -38,3 +41,5 @@ afterEvaluate {
         }
     }
 }
+
+

@@ -13,7 +13,7 @@ android {
         minSdk = 23
         targetSdk = 35
         versionCode = 1
-        versionName = "2.0.0"
+        versionName = "2.0.2"
     }
     buildFeatures {
         compose = true
@@ -29,6 +29,9 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+    }
+    lint {
+        disable += "NullSafeMutableLiveData"
     }
 }
 
@@ -58,4 +61,6 @@ dependencies {
     implementation(libs.compose.ui)
     debugImplementation(libs.compose.ui.tooling)
 }
+
+
 

@@ -6,14 +6,14 @@ it with one line from JitPack.
 ## 1. Push the source to GitHub
 
 ```bash
-# every framework module keeps version 2.0.1 (see root build)
+# every framework module keeps version 2.0.2 (see root build)
 git init
 git add .
 git commit -m "XJet 2.0 initial release"
 git remote add origin https://github.com/<your-org>/xjet.git
 git push -u origin main
-git tag 2.0.1
-git push origin 2.0.1
+git tag 2.0.2
+git push origin 2.0.2
 ```
 
 > Publishing to GitHub/JitPack requires YOUR GitHub account and token; this
@@ -21,7 +21,7 @@ git push origin 2.0.1
 
 ## 2. JitPack build
 
-Open `https://jitpack.io/#<your-org>/xjet/2.0.1` and click *Get it*.
+Open `https://jitpack.io/#<your-org>/xjet/2.0.2` and click *Get it*.
 JitPack builds the tag and exposes the modules below.
 
 ## 3. Consumer dependency
@@ -34,11 +34,11 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.<your-org>.xjet:xjet-core:2.0.1")
-    implementation("com.github.<your-org>.xjet:xjet-room:2.0.1")
-    implementation("com.github.<your-org>.xjet:xjet-ui-compose:2.0.1")
+    implementation("com.github.<your-org>.xjet:xjet-core:2.0.2")
+    implementation("com.github.<your-org>.xjet:xjet-room:2.0.2")
+    implementation("com.github.<your-org>.xjet:xjet-ui-compose:2.0.2")
     // KSP annotation processor
-    ksp("com.github.<your-org>.xjet:xjet-processor:2.0.1")
+    ksp("com.github.<your-org>.xjet:xjet-processor:2.0.2")
 }
 ```
 
@@ -84,6 +84,6 @@ Google/AndroidX dependencies at will (see README).
 - [ ] `gradle :xjet-spi:test` passes
 - [ ] `gradle :xjet-app:assembleDebug` passes
 - [ ] `gradle assembleRelease` produces `*/build/outputs/aar/*-release.aar`
-- [ ] GitHub tag `2.0.1` pushed
+- [ ] GitHub tag `2.0.2` pushed
 - [ ] JitPack build green for the tag
 - [ ] a scratch app compiles with the JitPack coordinates from section 3
