@@ -30,6 +30,7 @@ android {
 
 dependencies {
     api(libs.androidx.core.ktx)
+    api(libs.androidx.activity.ktx)
     api(libs.kotlinx.coroutines.android)
     api(libs.lifecycle.runtime.ktx)
     api(libs.lifecycle.viewmodel.ktx)
@@ -63,5 +64,6 @@ afterEvaluate {
         }
     }
 }
+
 
 

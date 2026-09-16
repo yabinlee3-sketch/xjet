@@ -13,7 +13,7 @@ android {
         minSdk = 23
         targetSdk = 35
         versionCode = 1
-        versionName = "2.2.0"
+        versionName = "2.2.1"
     }
     buildFeatures {
         compose = true
@@ -57,4 +57,5 @@ dependencies {
     implementation(libs.compose.ui)
     debugImplementation(libs.compose.ui.tooling)
 }
+
 

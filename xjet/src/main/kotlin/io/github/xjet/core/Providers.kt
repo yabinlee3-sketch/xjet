@@ -58,6 +58,7 @@ interface ImageTarget {
     fun onLoadFailed(throwable: Throwable) {}
 }
 
+@Deprecated("Use MVVM: XViewModel + UiState + XJetActivity / XJetStateBox instead.")
 /** Generic one-shot UI affordance delegated by base activities/fragments. */
 interface UiDelegate {
     fun showToast(message: String)
@@ -71,4 +72,5 @@ interface UiDelegate {
 interface XJetContent {
     val routePath: String
 }
+
 

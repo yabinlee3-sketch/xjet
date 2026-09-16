@@ -1,23 +1,17 @@
 package io.github.xjet.sample
 
-import androidx.lifecycle.viewModelScope
-import io.github.xjet.core.OneShotEvent
-import io.github.xjet.core.XJet
 import io.github.xjet.core.XViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 
-/** MVVM screen model for the Compose home page. */
-class HomeViewModel(
+/** MVVM screen model for the XML/Compose-via-XML page. */
+class XmlViewModel(
     private val repository: GreetingRepository = GreetingRepository(),
 ) : XViewModel() {
 
     private val _data = MutableStateFlow(HomeGreetingData())
     val data: StateFlow<HomeGreetingData> = _data.asStateFlow()
-
-    val toasts = OneShotEvent<String>()
 
     init {
         load()
@@ -27,18 +21,9 @@ class HomeViewModel(
 
     private fun load() {
         setLoading()
-        launchSafe("home.load") {
+        launchSafe("xml.load") {
             _data.value = repository.load()
             setContent()
         }
     }
-
-    fun onToast() {
-        viewModelScope.launch {
-            toasts.emit("one-shot event @ ${System.currentTimeMillis()}")
-        }
-    }
-
-    fun onOpenXml() = XJet.router().navigate("xmlScreen")
 }
-

@@ -4,6 +4,8 @@ import android.app.Activity
 import android.widget.Toast
 import io.github.xjet.core.UiDelegate
 
+@Deprecated("Legacy MVP-style helper. Prefer XJetActivity<VM> + onUiState(UiState).")
+@Suppress("DEPRECATION")
 /** Default XML UiDelegate with Toast + simple progress. */
 class XJetXmlUiDelegate(private val activity: Activity) : UiDelegate {
 
@@ -18,3 +20,4 @@ class XJetXmlUiDelegate(private val activity: Activity) : UiDelegate {
     override fun hideLoading() {
     }
 }
+

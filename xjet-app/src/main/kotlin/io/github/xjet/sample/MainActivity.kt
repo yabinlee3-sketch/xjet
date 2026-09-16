@@ -15,12 +15,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.github.xjet.compose.XJetStateBox
 import io.github.xjet.compose.XJetTheme
 import io.github.xjet.compose.collectAsEffect
 
@@ -38,36 +40,53 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun HomeScreen(vm: HomeViewModel = viewModel()) {
-    val state by vm.state.collectAsStateWithLifecycle()
+    val uiState by vm.uiState.collectAsStateWithLifecycle()
+    val data by vm.data.collectAsStateWithLifecycle()
     val context = LocalContext.current
     vm.toasts.collectAsEffect { message ->
         android.widget.Toast.makeText(context, message, android.widget.Toast.LENGTH_SHORT).show()
     }
 
     Scaffold { innerPadding ->
-        Column(
+        XJetStateBox(
+            state = uiState,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            Text("XJet 2.0 sample", style = MaterialTheme.typography.headlineSmall)
-            Text(state.greeting)
-            Text(state.config)
-            Button(onClick = { vm.onToast() }, modifier = Modifier.fillMaxWidth()) {
-                Text("Emit one-shot SharedFlow event")
+                .padding(innerPadding),
+            error = { message ->
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Text(message ?: "出错了")
+                    Button(onClick = { vm.retry() }) { Text("重试") }
+                }
+            },
+            content = {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Text("XJet 2.2 MVVM sample", style = MaterialTheme.typography.headlineSmall)
+                    Text(data.greeting)
+                    Text(data.config)
+                    Button(onClick = { vm.onToast() }, modifier = Modifier.fillMaxWidth()) {
+                        Text("Emit one-shot SharedFlow event")
+                    }
+                    Button(onClick = { vm.onOpenXml() }, modifier = Modifier.fillMaxWidth()) {
+                        Text("Open XML screen (also MVVM)")
+                    }
+                    AndroidView(
+                        factory = { lContext ->
+                            LayoutInflater.from(lContext).inflate(R.layout.embedded_xml, null)
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
             }
-            Button(onClick = { vm.onOpenXml() }, modifier = Modifier.fillMaxWidth()) {
-                Text("Open XML screen via @XRoute router")
-            }
-            AndroidView(
-                factory = { lContext ->
-                    LayoutInflater.from(lContext).inflate(R.layout.embedded_xml, null)
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
+        )
     }
 }
-

@@ -1,21 +1,21 @@
-# XJet 2.2.0 — Deployment (GitHub + JitPack)
+# XJet 2.2.1 — Deployment (GitHub + JitPack)
 
 Single-module release. Consumers depend on **one** artifact:
-`com.github.yabinlee3-sketch:xjet:2.2.0`.
+`com.github.yabinlee3-sketch:xjet:2.2.1`.
 
 ## 1. Push the source to GitHub
 
 ```bash
 git add .
-git commit -m "Merge XJet into a single module (v2.2.0)"
+git commit -m "Merge XJet into a single module (v2.2.1)"
 git push -u origin main
-git tag 2.2.0
-git push origin 2.2.0
+git tag 2.2.1
+git push origin 2.2.1
 ```
 
 ## 2. JitPack build
 
-Open `https://jitpack.io/#com.github.yabinlee3-sketch/xjet/2.2.0` and click
+Open `https://jitpack.io/#com.github.yabinlee3-sketch/xjet/2.2.1` and click
 *Get it*. Because only one module remains, the build exposes a single
 `xjet` artifact.
 
@@ -29,7 +29,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.yabinlee3-sketch:xjet:2.2.0")
+    implementation("com.github.yabinlee3-sketch:xjet:2.2.1")
 }
 ```
 
@@ -46,7 +46,8 @@ tagging to verify locally.
 - [ ] `:xjet:assembleRelease` produces `xjet/build/outputs/aar/xjet-release.aar`
 - [ ] `:xjet-app:assembleDebug` passes
 - [ ] lint: `:xjet:lintVitalAnalyzeRelease` + `:xjet-app:lintVitalAnalyzeRelease`
-- [ ] GitHub tag `2.2.0` pushed
-- [ ] JitPack build green for `2.2.0`
+- [ ] GitHub tag `2.2.1` pushed
+- [ ] JitPack build green for `2.2.1`
 - [ ] a scratch app compiles with the single JitPack coordinate from section 3
+
 

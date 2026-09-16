@@ -1,4 +1,4 @@
-# XJet 2.2.0
+# XJet 2.2.1
 
 A modern Android framework written in Kotlin that is **one library, one
 dependency** — just like XDroid. It keeps the design idea of
@@ -25,7 +25,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.yabinlee3-sketch:xjet:2.2.0")
+    implementation("com.github.yabinlee3-sketch:xjet:2.2.1")
 }
 ```
 
@@ -105,8 +105,23 @@ fun HomeScreen(vm: HomeViewModel = viewModel()) {
 
 ### XML side
 
-Extend `XJetActivity` and reuse the same ViewModel with
-`by viewModels()` — same MVVM shape, just the classic toolkit.
+XML screens are MVVM too — no exceptions. Extend `XJetActivity<VM>`, hand it the
+ViewModel via `by viewModels()`, override `uiState` and `onUiState(state)`:
+
+```kotlin
+class ProfileActivity : XJetActivity<ProfileViewModel>() {
+    override val viewModel: ProfileViewModel by viewModels()
+    override val uiState: StateFlow<UiState> get() = viewModel.uiState
+
+    override fun onUiState(state: UiState) {
+        setUiState(state, loading = binding.loading, error = binding.error, content = binding.content)
+    }
+}
+```
+
+The base class subscribes to the four-state `uiState` flow while STARTED, so classic XML
+pages, Compose pages and XML-embedded-Compose pages all follow the same
+**View → ViewModel → Repository** contract.
 
 ## Runtime SPI registration
 
@@ -175,4 +190,6 @@ configurations.configureEach {
 - All 2.1 features kept: global exception interceptor, persistent cache,
   structured log, network, image loader, permissions, kits/codec, chain router,
   recycle adapter, Room default, XML/Compose dual UI.
+
+
 
