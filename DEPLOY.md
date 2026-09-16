@@ -1,7 +1,7 @@
 # XJet 2.2.0 — Deployment (GitHub + JitPack)
 
 Single-module release. Consumers depend on **one** artifact:
-`com.github.yabinlee3-sketch:xjet:xjet:2.2.0`.
+`com.github.yabinlee3-sketch:xjet:2.2.0`.
 
 ## 1. Push the source to GitHub
 
@@ -29,7 +29,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.yabinlee3-sketch:xjet:xjet:2.2.0")
+    implementation("com.github.yabinlee3-sketch:xjet:2.2.0")
 }
 ```
 
@@ -49,3 +49,4 @@ tagging to verify locally.
 - [ ] GitHub tag `2.2.0` pushed
 - [ ] JitPack build green for `2.2.0`
 - [ ] a scratch app compiles with the single JitPack coordinate from section 3
+

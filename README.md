@@ -25,7 +25,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.yabinlee3-sketch:xjet:xjet:2.2.0")
+    implementation("com.github.yabinlee3-sketch:xjet:2.2.0")
 }
 ```
 
@@ -175,3 +175,4 @@ configurations.configureEach {
 - All 2.1 features kept: global exception interceptor, persistent cache,
   structured log, network, image loader, permissions, kits/codec, chain router,
   recycle adapter, Room default, XML/Compose dual UI.
+
