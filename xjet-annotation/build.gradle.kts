@@ -1,4 +1,7 @@
+import org.gradle.api.publish.maven.MavenPublication
+
 plugins {
+    id("maven-publish")
     alias(libs.plugins.kotlin.jvm)
 }
 
@@ -7,9 +10,22 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
+dependencies {
+}
+
 kotlin {
     compilerOptions {
         jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
     }
 }
 
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("maven") {
+                artifactId = project.name
+                from(components["java"])
+            }
+        }
+    }
+}

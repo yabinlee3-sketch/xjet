@@ -1,4 +1,7 @@
+import org.gradle.api.publish.maven.MavenPublication
+
 plugins {
+    id("maven-publish")
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
@@ -33,4 +36,15 @@ dependencies {
     api(libs.androidx.lifecycle.runtime.compose)
     api(libs.androidx.lifecycle.viewmodel.compose)
     api(libs.androidx.navigation.compose)
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("maven") {
+                artifactId = project.name
+                from(components["release"])
+            }
+        }
+    }
 }

@@ -1,4 +1,7 @@
+import org.gradle.api.publish.maven.MavenPublication
+
 plugins {
+    id("maven-publish")
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
 }
@@ -25,4 +28,15 @@ dependencies {
     api(project(":xjet-core"))
     api(libs.room.runtime)
     api(libs.room.ktx)
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("maven") {
+                artifactId = project.name
+                from(components["release"])
+            }
+        }
+    }
 }

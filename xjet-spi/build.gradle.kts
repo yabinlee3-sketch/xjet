@@ -1,4 +1,7 @@
+import org.gradle.api.publish.maven.MavenPublication
+
 plugins {
+    id("maven-publish")
     alias(libs.plugins.kotlin.jvm)
 }
 
@@ -18,3 +21,13 @@ kotlin {
     }
 }
 
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("maven") {
+                artifactId = project.name
+                from(components["java"])
+            }
+        }
+    }
+}
