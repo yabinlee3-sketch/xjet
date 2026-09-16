@@ -132,6 +132,42 @@ class LoggingCache(default: CacheProvider) : CacheProvider by default {
 XJet.override(CacheProvider::class.java, LoggingCache(XJet.cache()))
 ```
 
+### Global exception interceptor
+
+XJet owns a replaceable SPI for **error interception** so every exception can
+flow through one place (logging, Crashlytics, Sentry, custom analytics...).
+
+```kotlin
+class MyErrorReporter : ExceptionInterceptor {
+    override fun onError(source: String, t: Throwable, severity: ErrorSeverity) {
+        Crashlytics.recordException(t)
+    }
+}
+
+XJet.init(
+    this,
+    XJetConfig.Builder(this)
+        .errorInterceptor(MyErrorReporter())
+        .installUncaughtErrorHandler(true)   // also capture thread-level crashes
+        .build()
+)
+```
+
+After init, use the framework-wide helpers:
+
+```kotlin
+// report without rethrowing
+XJet.capture("vm.load", exception)
+
+// run a block and funnel failures to the interceptor
+val data = XJet.tryCatch("db.read") { dao.load() }
+
+// Flow exceptions are reported and the flow completes instead of crashing
+dao.watch().catchAndReport("db.watch").collect { ... }
+
+// swap at runtime if you need to
+XJet.override(ExceptionInterceptor::class.java, MyErrorReporter())
+```
 ### Dynamic dependency overrides via Gradle (4.4)
 
 Because no version is hard-pinned inside the framework, treat Google/AndroidX
@@ -182,9 +218,10 @@ gradle :xjet-app:assembleDebug
 ## Publishing (GitHub + JitPack)
 
 See [DEPLOY.md](DEPLOY.md) for the exact steps. The framework modules declare
-`com.github.xjet` as group and `2.0.3` as version, and a ready-to-use
+`com.github.xjet` as group and `2.0.4` as version, and a ready-to-use
 publication template lives in `gradle/jitpack-publish.gradle`.
 
 ## License
 
 MIT — see [LICENSE](LICENSE).
+

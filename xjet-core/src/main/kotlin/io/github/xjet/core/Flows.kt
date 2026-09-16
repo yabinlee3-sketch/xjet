@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 /** Injectable dispatcher bag. Replace at init via config for tests or platform runtimes. */
@@ -43,3 +44,14 @@ class OneShotEvent<T> {
     }
     fun asFlow(): Flow<T> = flow
 }
+
+/**
+ * Collect-friendly wrapper: any exception thrown upstream is reported to the
+ * global [ExceptionInterceptor] and the flow completes without crashing.
+ */
+fun <T> kotlinx.coroutines.flow.Flow<T>.catchAndReport(
+    source: String,
+): kotlinx.coroutines.flow.Flow<T> =
+    catch { e -> XJet.capture(source, e) }
+
+

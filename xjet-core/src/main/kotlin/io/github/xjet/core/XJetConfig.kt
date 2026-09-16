@@ -1,6 +1,7 @@
 package io.github.xjet.core
 
 import android.content.Context
+import io.github.xjet.spi.ExceptionInterceptor
 
 /** Configuration passed once to [XJet.init]. */
 data class XJetConfig(
@@ -13,6 +14,8 @@ data class XJetConfig(
     val eventBus: EventBusProvider? = null,
     val router: RouterProvider? = null,
     val imageLoader: ImageLoaderProvider? = null,
+    val errorInterceptor: ExceptionInterceptor? = null,
+    val installUncaughtErrorHandler: Boolean = false,
     val logTag: String = "XJet",
     val onInitialized: ((XJet) -> Unit)? = null,
 ) {
@@ -25,6 +28,8 @@ data class XJetConfig(
         private var eventBus: EventBusProvider? = null
         private var router: RouterProvider? = null
         private var imageLoader: ImageLoaderProvider? = null
+        private var errorInterceptor: ExceptionInterceptor? = null
+        private var installUncaughtErrorHandler = false
         private var logTag = "XJet"
         private var onInitialized: ((XJet) -> Unit)? = null
 
@@ -36,6 +41,8 @@ data class XJetConfig(
         fun eventBus(value: EventBusProvider?) = apply { eventBus = value }
         fun router(value: RouterProvider?) = apply { router = value }
         fun imageLoader(value: ImageLoaderProvider?) = apply { imageLoader = value }
+        fun errorInterceptor(value: ExceptionInterceptor?) = apply { errorInterceptor = value }
+        fun installUncaughtErrorHandler(value: Boolean) = apply { installUncaughtErrorHandler = value }
         fun logTag(value: String) = apply { logTag = value }
         fun onInitialized(value: (XJet) -> Unit) = apply { onInitialized = value }
         fun build() = XJetConfig(
@@ -48,6 +55,8 @@ data class XJetConfig(
             eventBus = eventBus,
             router = router,
             imageLoader = imageLoader,
+            errorInterceptor = errorInterceptor,
+            installUncaughtErrorHandler = installUncaughtErrorHandler,
             logTag = logTag,
             onInitialized = onInitialized,
         )
