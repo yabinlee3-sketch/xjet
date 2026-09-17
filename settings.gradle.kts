@@ -20,3 +20,4 @@ rootProject.name = "xjet"
 
 include(":xjet")
 include(":xjet-app")
+include(":xjet-news-demo")
