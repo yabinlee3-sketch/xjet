@@ -1,9 +1,10 @@
-package io.github.xjet.newsdemo
+package io.github.xjet.newsdemo.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import io.github.xjet.compose.XJetTheme
+import io.github.xjet.newsdemo.model.NewsItem
 
 class NewsDetailActivity : ComponentActivity() {
     @Suppress("DEPRECATION")
@@ -17,4 +18,3 @@ class NewsDetailActivity : ComponentActivity() {
         }
     }
 }
-

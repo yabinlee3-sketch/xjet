@@ -1,8 +1,9 @@
-package io.github.xjet.newsdemo
+package io.github.xjet.newsdemo.app
 
 import android.app.Application
 import io.github.xjet.core.XJet
 import io.github.xjet.core.XJetConfig
+import io.github.xjet.newsdemo.ui.NewsDetailActivity
 
 class NewsDemoApp : Application() {
     override fun onCreate() {

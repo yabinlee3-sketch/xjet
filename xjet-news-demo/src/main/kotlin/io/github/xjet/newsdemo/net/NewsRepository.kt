@@ -1,9 +1,11 @@
-package io.github.xjet.newsdemo
+package io.github.xjet.newsdemo.net
 
 import io.github.xjet.core.HttpResponse
 import io.github.xjet.core.XJet
 import io.github.xjet.core.XRepository
 import io.github.xjet.core.getText
+import io.github.xjet.newsdemo.kit.NewsKit
+import io.github.xjet.newsdemo.model.NewsItem
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -18,7 +20,7 @@ import org.json.JSONObject
 class NewsRepository : XRepository() {
 
     suspend fun fetchTop(limit: Int = 20): List<NewsItem> = safe("news.top") {
-        val ids = idsFrom(XJet.getText(HN_TOP_URL))
+        val ids = idsFrom(XJet.getText(NewsKit.HN_TOP_URL))
         coroutineScope {
             ids.take(limit).map { id -> async { itemFrom(id) } }.awaitAll()
         }.filterNotNull()
@@ -35,7 +37,7 @@ class NewsRepository : XRepository() {
     }
 
     private suspend fun itemFrom(id: Long): NewsItem? {
-        val response = XJet.getText("$HN_ITEM_URL/$id.json")
+        val response = XJet.getText("${NewsKit.HN_ITEM_URL}/$id.json")
         if (!response.isSuccess) return null
         val json = JSONObject(response.bodyText)
         if (!json.has("title") || json.isNull("title")) return null
@@ -47,10 +49,5 @@ class NewsRepository : XRepository() {
             comments = json.optInt("descendants"),
             url = json.optString("url").ifBlank { "https://news.ycombinator.com/item?id=$id" },
         )
-    }
-
-    private companion object {
-        const val HN_TOP_URL = "https://hacker-news.firebaseio.com/v0/topstories.json"
-        const val HN_ITEM_URL = "https://hacker-news.firebaseio.com/v0/item"
     }
 }

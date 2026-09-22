@@ -1,4 +1,4 @@
-package io.github.xjet.newsdemo
+package io.github.xjet.newsdemo.model
 
 import java.io.Serializable
 

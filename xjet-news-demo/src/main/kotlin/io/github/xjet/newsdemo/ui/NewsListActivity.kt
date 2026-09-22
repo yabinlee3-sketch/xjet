@@ -1,4 +1,4 @@
-package io.github.xjet.newsdemo
+package io.github.xjet.newsdemo.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

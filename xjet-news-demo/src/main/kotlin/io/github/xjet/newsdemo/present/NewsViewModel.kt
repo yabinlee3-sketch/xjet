@@ -1,6 +1,8 @@
-package io.github.xjet.newsdemo
+package io.github.xjet.newsdemo.present
 
 import io.github.xjet.core.XViewModel
+import io.github.xjet.newsdemo.model.NewsItem
+import io.github.xjet.newsdemo.net.NewsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

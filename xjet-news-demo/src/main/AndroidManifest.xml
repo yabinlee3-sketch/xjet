@@ -4,13 +4,13 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".NewsDemoApp"
+        android:name=".app.NewsDemoApp"
         android:allowBackup="true"
         android:label="XJet 新闻"
         android:theme="@android:style/Theme.Material.Light.NoActionBar">
 
         <activity
-            android:name=".NewsListActivity"
+            android:name=".ui.NewsListActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,7 +19,8 @@
         </activity>
 
         <activity
-            android:name=".NewsDetailActivity"
+            android:name=".ui.NewsDetailActivity"
             android:exported="false" />
     </application>
 </manifest>
+

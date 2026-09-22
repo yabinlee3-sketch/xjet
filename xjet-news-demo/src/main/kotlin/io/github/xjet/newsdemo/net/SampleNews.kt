@@ -1,4 +1,6 @@
-package io.github.xjet.newsdemo
+package io.github.xjet.newsdemo.net
+
+import io.github.xjet.newsdemo.model.NewsItem
 
 /** Offline fallback so the demo always shows something when the network is down. */
 object SampleNews {
